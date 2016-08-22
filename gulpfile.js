@@ -163,7 +163,6 @@ gulp.task('default', ['browserSync', 'js', 'scss'], function() {
 	gulp.watch('app/scss/**', ['scss']);
 	gulp.watch('app/images/**', ['images']);
 	gulp.watch('app/jade/*.jade', ['jade']);
-	gulp.watch('app/*.html', ['html']);
 });
 
 gulp.task('deploy', gulpSequence('clean', 'scaffold', ['js-deploy', 'css-deploy', 'images-deploy'], 'html-deploy'));
