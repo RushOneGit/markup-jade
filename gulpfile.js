@@ -12,7 +12,11 @@ var shell                 = require('gulp-shell');
 var plumber               = require('gulp-plumber');
 var gcmq                  = require('gulp-group-css-media-queries');
 var csscomb               = require('gulp-csscomb');
+var jadeInheritance       = require('gulp-jade-inheritance');
 var jade                  = require('gulp-jade');
+var changed               = require('gulp-changed');
+var cached                = require('gulp-cached');
+var filter                = require('gulp-filter');
 
 
 gulp.task('browserSync', function() {
@@ -103,12 +107,17 @@ gulp.task('css-deploy', function() {
 
 gulp.task('jade', function() {
 	gulp.src('app/jade/*.jade')
-		.pipe(jade({
-			pretty: true}
-		))
 		.pipe(plumber())
-		.pipe(gulp.dest('app/'))
-		.on('error', gutil.log)
+		.pipe(cached('jade'))
+		.pipe(changed('app', {extension: '.html'}))
+		.pipe(jadeInheritance({basedir: 'app/jade'}))
+		.pipe(filter(function (file) {
+			return !/\/_/.test(file.path) && !/^_/.test(file.relative);
+		}))
+		.pipe(jade({
+			pretty: true
+		}))
+		.pipe(gulp.dest('app'))
 		.pipe(browserSync.reload({stream: true}));
 });
 
@@ -158,7 +167,7 @@ gulp.task('scaffold', function() {
 	);
 });
 
-gulp.task('default', ['browserSync', 'js', 'scss'], function() {
+gulp.task('default', ['browserSync', 'js', 'scss', 'jade'], function() {
 	gulp.watch('app/js/**/**', ['js']);
 	gulp.watch('app/scss/**', ['scss']);
 	gulp.watch('app/images/**', ['images']);
