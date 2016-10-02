@@ -161,9 +161,9 @@ gulp.task('html-deploy', function() {
 		.pipe(plumber())
 		.pipe(gulp.dest('dist/fonts'));
 
-	gulp.src(['app/styles/*.css', '!app/styles/styles.css'])
+	gulp.src('app/scss/**/*')
 		.pipe(plumber())
-		.pipe(gulp.dest('dist/styles'));
+		.pipe(gulp.dest('dist/scss'));
 });
 
 gulp.task('clean', function() {
