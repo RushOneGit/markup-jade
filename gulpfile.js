@@ -17,6 +17,7 @@ var jade                  = require('gulp-jade');
 var changed               = require('gulp-changed');
 var cached                = require('gulp-cached');
 var filter                = require('gulp-filter');
+var spritesmith           = require('gulp.spritesmith');
 
 
 gulp.task('browserSync', function() {
@@ -34,6 +35,20 @@ gulp.task('browserSync', function() {
 		notify: false
 	});
 });
+
+
+gulp.task('sprite', function() {
+    var spriteData = 
+        gulp.src('app/images/sprite/*.*') // путь, откуда берем картинки для спрайта
+            .pipe(spritesmith({
+                imgName: '../images/sprite.png',
+                cssName: 'sprite.css',
+            }));
+
+    spriteData.img.pipe(gulp.dest('app/images/')); // путь, куда сохраняем картинку
+    spriteData.css.pipe(gulp.dest('app/css/')); // путь, куда сохраняем стили
+});
+
 
 gulp.task('images', function(tmp) {
 	gulp.src(['app/images/*.jpg', 'app/images/*.png'])
