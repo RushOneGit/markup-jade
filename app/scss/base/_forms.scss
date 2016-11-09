@@ -19,11 +19,6 @@ textarea {
   -webkit-border-radius: 0;
   box-sizing: border-box;
   border: none;
-  padding: 10px 20px;
-
-  // &:hover {
-    
-  // }
 
   &:focus {
     
@@ -32,6 +27,16 @@ textarea {
   @include placeholder {
     color: $gray;
   }
+}
+
+input[type='text'],
+input[type='tel'],
+input[type='email'],
+input[type='search'],
+input[type='password'],
+input[type='url'],
+// input[type='date'] {
+  
 }
 
 select {
