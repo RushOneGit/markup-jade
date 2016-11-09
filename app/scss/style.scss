@@ -22,14 +22,15 @@ $media-expressions: (
 @import 'vendors/include-media';
 @import 'vendors/normalize';
 
-@import 'base/variables';
-@import 'base/functions';
-@import 'base/mixins';
-@import 'base/helpers';
-@import 'base/reset';
-@import 'base/typography';
-@import 'base/forms';
+@import 'base/_variables.scss';
+@import 'base/_functions.scss';
+@import 'base/_mixins.scss';
+@import 'base/_helpers.scss';
+@import 'base/_reset.scss';
+@import 'base/_typography.scss';
+@import 'base/_forms.scss';
 @import 'base/_plugins.scss';
+@import 'base/_wp-reset.scss';
 
 /*
 Theme Name: PROJECT NAME
