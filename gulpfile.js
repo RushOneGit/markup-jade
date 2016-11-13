@@ -18,6 +18,7 @@ var changed               = require('gulp-changed');
 var cached                = require('gulp-cached');
 var filter                = require('gulp-filter');
 var spritesmith           = require('gulp.spritesmith');
+var svgmin                = require('gulp-svgmin');
 
 
 gulp.task('browserSync', function() {
@@ -38,23 +39,38 @@ gulp.task('browserSync', function() {
 
 
 gulp.task('sprite', function() {
-		var spriteData = 
-				gulp.src('app/images/sprite/*.*') // путь, откуда берем картинки для спрайта
-						.pipe(spritesmith({
-								imgName: '../images/sprite.png',
-								cssName: 'sprite.css',
-						}));
+	var spriteData = 
+		gulp.src('app/images/sprite/*.*') // путь, откуда берем картинки для спрайта
+			.pipe(spritesmith({
+					imgName: '../images/sprite.png',
+					cssName: 'sprite.css',
+			}));
 
-		spriteData.img.pipe(gulp.dest('app/images/')); // путь, куда сохраняем картинку
-		spriteData.css.pipe(gulp.dest('app/css/')); // путь, куда сохраняем стили
+	spriteData.img.pipe(gulp.dest('app/images/')); // путь, куда сохраняем картинку
+	spriteData.css.pipe(gulp.dest('app/css/')); // путь, куда сохраняем стили
 });
 
-
 gulp.task('images', function(tmp) {
-	gulp.src(['app/images/*.jpg', 'app/images/*.png'])
+	gulp.src(['dist/images/*.jpg', 'dist/images/*.png', 'dist/images/*.svg'])
 		.pipe(plumber())
-		.pipe(imagemin({ optimizationLevel: 5, progressive: true, interlaced: true }))
-		.pipe(gulp.dest('app/images'));
+		.pipe(svgmin({
+			plugins: [{
+					removeDoctype: false
+				}, {
+					removeComments: false
+				}, {
+				cleanupNumericValues: {
+					floatPrecision: 2
+				}
+				}, {
+				convertColors: {
+					names2hex: false,
+					rgb2hex: false
+				}
+				}]
+		}))
+		.pipe(imagemin({ optimizationLevel: 3, progressive: true, interlaced: true }))
+		.pipe(gulp.dest('dist/images'));
 });
 
 gulp.task('images-deploy', function() {
@@ -187,8 +203,7 @@ gulp.task('scaffold', function() {
 gulp.task('default', ['browserSync', 'js', 'scss', 'jade'], function() {
 	gulp.watch('app/js/**/**', ['js']);
 	gulp.watch('app/scss/**', ['scss']);
-	gulp.watch('app/images/**', ['images']);
 	gulp.watch('app/jade/**/**', ['jade']);
 });
 
-gulp.task('deploy', gulpSequence('clean', 'scaffold', ['js-deploy', 'css-deploy', 'images-deploy'], 'html-deploy'));
+gulp.task('deploy', gulpSequence('clean', 'scaffold', ['js-deploy', 'css-deploy', 'images-deploy'], 'html-deploy', 'images'));
