@@ -1,4 +1,4 @@
-var autoPrefixBrowserList = ['last 2 version', 'safari 5', 'ie 11', 'opera 12.1', 'ios 6', 'android 4'];
+var autoPrefixBrowserList = ['last 4 version', 'safari 8', 'ie 11', 'opera 12.1', 'ios 6', 'android 4'];
 var gulp                  = require('gulp');
 var gutil                 = require('gulp-util');
 var concat                = require('gulp-concat');
@@ -30,7 +30,7 @@ gulp.task('browserSync', function() {
 			reloadDelay: 250
 		},
 
-		browser: "google chrome",
+		browser: "chrome",
 
 		notify: false
 	});
@@ -38,15 +38,15 @@ gulp.task('browserSync', function() {
 
 
 gulp.task('sprite', function() {
-    var spriteData = 
-        gulp.src('app/images/sprite/*.*') // путь, откуда берем картинки для спрайта
-            .pipe(spritesmith({
-                imgName: '../images/sprite.png',
-                cssName: 'sprite.css',
-            }));
+		var spriteData = 
+				gulp.src('app/images/sprite/*.*') // путь, откуда берем картинки для спрайта
+						.pipe(spritesmith({
+								imgName: '../images/sprite.png',
+								cssName: 'sprite.css',
+						}));
 
-    spriteData.img.pipe(gulp.dest('app/images/')); // путь, куда сохраняем картинку
-    spriteData.css.pipe(gulp.dest('app/css/')); // путь, куда сохраняем стили
+		spriteData.img.pipe(gulp.dest('app/images/')); // путь, куда сохраняем картинку
+		spriteData.css.pipe(gulp.dest('app/css/')); // путь, куда сохраняем стили
 });
 
 
@@ -97,6 +97,7 @@ gulp.task('scss', function() {
 			cascade:  true
 		}))
 		.on('error', gutil.log)
+		.pipe(gcmq())
 		.pipe(sourceMaps.write())
 		.pipe(gulp.dest('app/css'))
 		.pipe(browserSync.reload({stream: true}));
