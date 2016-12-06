@@ -31,9 +31,7 @@ gulp.task('browserSync', function() {
 			reloadDelay: 250
 		},
 
-		browser: "chrome",
-
-		notify: false
+		notify: true
 	});
 });
 
