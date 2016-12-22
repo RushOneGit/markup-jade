@@ -17,7 +17,7 @@ var jade                  = require('gulp-jade');
 var changed               = require('gulp-changed');
 var cached                = require('gulp-cached');
 var filter                = require('gulp-filter');
-var spritesmith           = require('gulp.spritesmith');
+var svgstore              = require('gulp-svgstore');
 var svgmin                = require('gulp-svgmin');
 
 
@@ -36,20 +36,38 @@ gulp.task('browserSync', function() {
 });
 
 
-gulp.task('sprite', function() {
-	var spriteData = 
-		gulp.src('app/images/sprite/*.*') // путь, откуда берем картинки для спрайта
-			.pipe(spritesmith({
-					imgName: '../images/sprite.png',
-					cssName: 'sprite.css',
-			}));
-
-	spriteData.img.pipe(gulp.dest('app/images/')); // путь, куда сохраняем картинку
-	spriteData.css.pipe(gulp.dest('app/css/')); // путь, куда сохраняем стили
+gulp.task('svgsprite', function () {
+	return gulp
+		.src('app/images/icons/*.svg')
+		.pipe(svgmin({
+			plugins: [{
+					removeDoctype: false
+				}, {
+					removeComments: false
+				}, {
+				cleanupNumericValues: {
+					floatPrecision: 2
+				}
+				}, {
+				convertColors: {
+					names2hex: false,
+					rgb2hex: false
+				}
+				}]
+		}))
+		.pipe(svgstore({ inlineSvg: true }))
+		.pipe(gulp.dest('app/images'));
 });
 
-gulp.task('images', function(tmp) {
-	gulp.src(['dist/images/*.jpg', 'dist/images/*.png', 'dist/images/*.svg'])
+gulp.task('images', function() {
+	gulp.src('dist/images/*.{png, jpg, gif}')
+		.pipe(plumber())
+		.pipe(imagemin({ optimizationLevel: 3, progressive: true, interlaced: true }))
+		.pipe(gulp.dest('dist/images'));
+});
+
+gulp.task('svg-images', function() {
+	gulp.src('dist/images/*.svg')
 		.pipe(plumber())
 		.pipe(svgmin({
 			plugins: [{
@@ -67,9 +85,9 @@ gulp.task('images', function(tmp) {
 				}
 				}]
 		}))
-		.pipe(imagemin({ optimizationLevel: 3, progressive: true, interlaced: true }))
 		.pipe(gulp.dest('dist/images'));
 });
+
 
 gulp.task('images-deploy', function() {
 	gulp.src(['app/images/**/*', '!app/images/README'])
@@ -204,4 +222,4 @@ gulp.task('default', ['browserSync', 'js', 'scss', 'jade'], function() {
 	gulp.watch('app/jade/**/**', ['jade']);
 });
 
-gulp.task('deploy', gulpSequence('clean', 'scaffold', ['js-deploy', 'css-deploy', 'images-deploy'], 'html-deploy', 'images'));
+gulp.task('deploy', gulpSequence('clean', 'scaffold', ['js-deploy', 'css-deploy', 'images-deploy'], 'html-deploy', 'images', 'svg-images'));
