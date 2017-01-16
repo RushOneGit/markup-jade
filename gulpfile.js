@@ -166,7 +166,7 @@ gulp.task('jade', function() {
 			pretty: true
 		}))
 		.on('error', gutil.log)
-		.pipe(gulp.dest('app'))
+		.pipe(gulp.dest('app/jade'))
 		.pipe(browserSync.reload({stream: true}));
 });
 
