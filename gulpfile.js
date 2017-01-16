@@ -177,11 +177,7 @@ gulp.task('html', function() {
 		.on('error', gutil.log);
 });
 
-gulp.task('html-deploy', function() {
-	gulp.src('app/*.html')
-		.pipe(plumber())
-		.pipe(gulp.dest('dist'));
-
+gulp.task('folder-deploy', function() {
 	gulp.src('app/*.html')
 		.pipe(plumber())
 		.pipe(gulp.dest('dist'));
@@ -207,11 +203,7 @@ gulp.task('clean', function() {
 
 gulp.task('scaffold', function() {
 		return shell.task([
-			'mkdir dist',
-			'mkdir dist/fonts',
-			'mkdir dist/images',
-			'mkdir dist/js',
-			'mkdir dist/css'
+			'mkdir dist'
 		]
 	);
 });
@@ -222,4 +214,4 @@ gulp.task('default', ['browserSync', 'js', 'scss', 'jade'], function() {
 	gulp.watch('app/jade/**/**', ['jade']);
 });
 
-gulp.task('deploy', gulpSequence('clean', 'scaffold', ['js-deploy', 'css-deploy', 'images-deploy'], 'html-deploy', 'images', 'svg-images'));
+gulp.task('deploy', gulpSequence('clean', 'scaffold', ['js-deploy', 'css-deploy', 'images-deploy'], 'folder-deploy', 'images', 'svg-images'));
