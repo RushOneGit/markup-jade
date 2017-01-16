@@ -193,6 +193,10 @@ gulp.task('folder-deploy', function() {
 	gulp.src('app/scss/**/*')
 		.pipe(plumber())
 		.pipe(gulp.dest('dist/scss'));
+	
+	gulp.src('app/video/**/*')
+		.pipe(plumber())
+		.pipe(gulp.dest('dist/video'));
 });
 
 gulp.task('clean', function() {
