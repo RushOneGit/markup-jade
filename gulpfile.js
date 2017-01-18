@@ -154,7 +154,7 @@ gulp.task('css-deploy', function() {
 });
 
 gulp.task('jade', function() {
-	gulp.src('app/jade/**/*.jade')
+	gulp.src('app/jade/*.jade')
 		.pipe(plumber())
 		.pipe(cached('jade'))
 		.pipe(changed('app', {extension: '.html'}))
@@ -166,7 +166,7 @@ gulp.task('jade', function() {
 			pretty: true
 		}))
 		.on('error', gutil.log)
-		.pipe(gulp.dest('app/jade'))
+		.pipe(gulp.dest('app'))
 		.pipe(browserSync.reload({stream: true}));
 });
 
