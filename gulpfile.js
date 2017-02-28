@@ -108,7 +108,7 @@ gulp.task('js-deploy', function() {
 });
 
 gulp.task('scss', function() {
-	return gulp.src('app/scss/style.scss')
+	return gulp.src('app/scss/main.scss')
 		.pipe(plumber({
 			errorHandler: function (err) {
 				console.log(err);
@@ -134,11 +134,11 @@ gulp.task('scss', function() {
 });
 
 gulp.task('css-deploy', function() {
-	return gulp.src('app/scss/style.scss')
+	return gulp.src('app/scss/main.scss')
 		.pipe(plumber())
 		.pipe(sass({
 			includePaths: [
-				'app/styles/scss',
+				'app/scss',
 			]
 		}))
 		.pipe(autoprefixer({
@@ -147,7 +147,7 @@ gulp.task('css-deploy', function() {
 		}))
 		.pipe(gcmq())
 		.pipe(csscomb())
-		.pipe(concat('style.css'))
+		.pipe(concat('main.css'))
 		.pipe(gulp.dest('dist/css'));
 });
 
