@@ -35,7 +35,6 @@ gulp.task('browserSync', function() {
 	});
 });
 
-
 gulp.task('svgsprite', function () {
 	return gulp
 		.src('app/images/icons/*.svg')
@@ -87,7 +86,6 @@ gulp.task('svg-images', function() {
 		}))
 		.pipe(gulp.dest('dist/images'));
 });
-
 
 gulp.task('images-deploy', function() {
 	gulp.src(['app/images/**/*', '!app/images/README'])
@@ -154,7 +152,7 @@ gulp.task('css-deploy', function() {
 });
 
 gulp.task('jade', function() {
-	gulp.src('app/jade/*.jade')
+	gulp.src('app/jade/**/*.jade')
 		.pipe(plumber())
 		.pipe(cached('jade'))
 		.pipe(changed('app', {extension: '.html'}))
